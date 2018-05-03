@@ -32,6 +32,7 @@ def Rotate(src, degrees):
     else:
         dst = null
     return dst
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='tf-pose-estimation Video')
     parser.add_argument('--video', type=str, default='')
@@ -47,7 +48,7 @@ if __name__ == '__main__':
     e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
     #logger.debug('cam read+')
     #cam = cv2.VideoCapture(args.camera)
-    cap = cv2.VideoCapture('HUN.mp4')
+    cap = cv2.VideoCapture('HUN2.mp4')
     #ret_val, image = cap.read()
     #logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
     if (cap.isOpened()== False):
@@ -58,6 +59,10 @@ if __name__ == '__main__':
 
         humans = e.inference(image)
         image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
+
+        print('(%.2f, %.2f),(%.2f, %.2f)' % (humans[0].body_parts[2].x/2, humans[0].body_parts[2].y,
+                                             humans[0].body_parts[5].x/2, humans[0].body_parts[5].y))
+
 
         #logger.debug('show+')
         cv2.putText(image,
