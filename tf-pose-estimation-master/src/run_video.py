@@ -1,6 +1,7 @@
 import argparse
 import logging
 import time
+import copy
 
 import cv2
 import numpy as np
@@ -58,29 +59,26 @@ if __name__ == '__main__':
     e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
     #logger.debug('cam read+')
     #cam = cv2.VideoCapture(args.camera)
-    cap = cv2.VideoCapture('HUN2.mp4')
+    cap = cv2.VideoCapture('C:/Users/BIT-USER/Desktop/HUN.mp4')
     #ret_val, image = cap.read()
     #logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
 
-
-
     if (cap.isOpened()== False):
         print("Error opening video stream or file")
-        ret_val, image = cap.read()
-        image = Rotate(image, 90)
-        pre_L_x, pre_L_y, pre_R_x, pre_R_y = 0
-        humans = e.inference(image)
-        image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-        # pre_R_x = humans[0].body_parts[2].x/2
-        # pre_R_y = humans[0].body_parts[2].y
-        # pre_L_x = humans[0].body_parts[5].x/2
-        # pre_L_y = humans[0].body_parts[5].y
+    ret_val, image = cap.read()
+    image = Rotate(image, 90)
+    pre_L_x, pre_L_y, pre_R_x, pre_R_y = 0, 0, 0, 0
+    curr_R_x, curr_R_y, curr_L_x, curr_L_y = 0, 0, 0, 0
+    humans = e.inference(image)
+    image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-        buffer_R_x = []
-        buffer_R_y = []
-        buffer_L_x = []
-        buffer_L_y = []
+    pre_R_x = humans[0].body_parts[2].x / 2
+    pre_R_y = humans[0].body_parts[2].y
+    pre_L_x = humans[0].body_parts[5].x/2
+    pre_L_y = humans[0].body_parts[5].y
+
+
 
     while(cap.isOpened()):
         ret_val, image = cap.read()
@@ -89,29 +87,18 @@ if __name__ == '__main__':
         humans = e.inference(image)
         image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-        pre_R_x = curr_R_x + 1
-        pre_R_y = curr_R_y + 1
-        pre_L_x = curr_L_x + 1
-        pre_L_y = curr_L_x + 1
-
         curr_R_x = humans[0].body_parts[2].x/2
         curr_R_y = humans[0].body_parts[2].y
         curr_L_x = humans[0].body_parts[5].x/2
         curr_L_y = humans[0].body_parts[5].y
 
-        buffer_R_x[curr_R_x] = curr_R_x
-        curr_R_x = pre_R_x
-
-        print(pre_R_x, curr_R_x)
-
-
-        # print(pre_R_x - curr_R_x)
-        # if (abs(pre_R_x - curr_R_x) > 0.18):
-        #     print('정신차리세요')
-        # elif (abs(pre_R_x - curr_R_x) < 0.15):
-        #     print('정신차리세요')
-        # else:
-        #     print('올바른 자세입니다.')
+        print(pre_R_x - curr_R_x)
+        if ((pre_R_x - curr_R_x) > 0.01):
+            print('정신차리세요')
+        elif ((pre_R_x - curr_R_x) < 0):
+            print('정신차리세요')
+        else:
+            print('올바른 자세입니다.')
 
         #logger.debug('show+')
         cv2.putText(image,
@@ -122,7 +109,6 @@ if __name__ == '__main__':
         fps_time = time.time()
         if cv2.waitKey(1) == 27:
             break
-
 
     cv2.destroyAllWindows()
 logger.debug('finished+')
