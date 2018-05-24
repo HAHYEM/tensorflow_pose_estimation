@@ -1,4 +1,3 @@
-from thread_basic import FileVideoStream
 import argparse
 import logging
 import time
@@ -21,14 +20,6 @@ formatter = logging.Formatter('[%(asctime)s] [%(name)s] [%(levelname)s] %(messag
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-path = 'C:/Users/BIT-USER/Desktop/HUN.mp4'
-scaling_factor = 0.25
-
-fvs = FileVideoStream(path).start()
-
-time.sleep(1)
-
-e1 = cv2.getTickCount()
 
 def Rotate(src, degrees):
     if degrees == 90:
@@ -45,7 +36,39 @@ def Rotate(src, degrees):
         dst = None
     return dst
 
+scaling_factor = 0.75
+
+def run_video(video_info, queue):
+    video = cv2.VideoCapture(video_info)
+    cnt = 0
+
+    while True:
+        ret, frame = video.read()
+
+        if ret:  # 영상 프레임이 있으면 실행
+            if cnt % 4 == 0:
+                frame = Rotate(frame, 90)
+                frame = cv2.resize(frame, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
+                queue.put(frame)
+#                queue2.put(frame)
+
+            cnt = cnt + 1
+
+        else:
+            queue.put(None)
+#            queue2.put(None)
+            video.release()
+            break
+
+
 fps_time = 0
+
+# def what():
+#     def_R_x = max(list(curr_R_x), key=list(curr_R_x))
+#     def_R_y = max(curr_R_y, key=curr_R_y.Counter)
+#     def_L_x = max(curr_L_x, key=curr_L_x.Counter)
+#     def_L_y = max(curr_L_y, key=curr_L_y.Counter)
+#     print('(%.2f, %.2f),(%.2f, %.2f)' % (def_R_x, def_R_y, def_L_x, def_L_y))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='tf-pose-estimation Video')
@@ -63,6 +86,11 @@ if __name__ == '__main__':
     #logger.debug('cam read+')
     #cam = cv2.VideoCapture(args.camera)
     cap = cv2.VideoCapture('C:/Users/BIT-USER/Desktop/HUN.mp4')
+
+    queue = Queue()
+
+    run_video('C:/Users/BIT-USER/Desktop/HUN.mp4',queue)
+
     #ret_val, image = cap.read()
     #logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
 
@@ -81,7 +109,9 @@ if __name__ == '__main__':
     pre_L_x = humans[0].body_parts[5].x/2
     pre_L_y = humans[0].body_parts[5].y
 
-    while fvs.has_more():
+
+
+    while(cap.isOpened()):
         ret_val, image = cap.read()
         image = Rotate(image, 90)
 
@@ -110,6 +140,6 @@ if __name__ == '__main__':
         fps_time = time.time()
         if cv2.waitKey(1) == 27:
             break
-    fvs.stop()
+
     cv2.destroyAllWindows()
 logger.debug('finished+')
