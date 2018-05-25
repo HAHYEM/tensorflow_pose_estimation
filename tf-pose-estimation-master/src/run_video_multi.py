@@ -85,7 +85,7 @@ fps_time = 0
 
 
 # update_cnt = 0
-# read_cnt = 0
+read_cnt = 0
 
 class WebcamVideoStream:
     def __init__(self, src='', width=320, height=240):
@@ -112,18 +112,20 @@ class WebcamVideoStream:
             (grabbed, frame) = self.stream.read()
             self.grabbed, self.frame = grabbed, frame
             self.read_lock.release()
+
             # update_cnt = update_cnt + 1
             # print("update_cnt", update_cnt)
+            time.sleep(0.01)
 
     def read(self):
-        # global read_cnt
+        global read_cnt
         self.read_lock.acquire()
 
         grabbed = self.grabbed
         frame = self.frame
         self.read_lock.release()
-        # read_cnt += 1
-        # print("read_cnt", read_cnt)
+        read_cnt += 1
+        print("read_cnt", read_cnt)
         return grabbed, frame
 
     def stop(self):
@@ -167,11 +169,14 @@ if __name__ == "__main__":
     pre_L_x = humans[0].body_parts[5].x / 2
     pre_L_y = humans[0].body_parts[5].y
 
+    # print('pre_R_x', pre_R_x)
+    print('pre_R_y', pre_R_y)
+
     e1 = cv2.getTickCount()
     i = True
 
     # frame_cnt = 0
-    # print("FRAMEEEE", v_cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    print("FRAMEEEE", v_cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     while i:
         ret, image = vs.read()
@@ -181,7 +186,6 @@ if __name__ == "__main__":
             # print("frame_cnt", frame_cnt)
             # frame_cnt += 1
             image = Rotate(image, 90)
-            cv2.imshow('webcam', image)
             humans = e.inference(image)
             image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
@@ -190,10 +194,14 @@ if __name__ == "__main__":
             curr_L_x = humans[0].body_parts[5].x / 2
             curr_L_y = humans[0].body_parts[5].y
 
-            print(pre_R_x - curr_R_x)
-            if ((pre_R_x - curr_R_x) > 0.01):
+            # print('curr_R_x', curr_R_x)
+            # print('curr_R_y', curr_R_y)
+
+            # print('x좌표 차이', pre_R_x - curr_R_x)
+            # print('y좌표 차이', pre_R_y - curr_R_y)
+            if ((pre_R_x - curr_R_x) >= 0.01 or (pre_R_y - curr_R_y) >= 0.02):
                 print('정신차리세요')
-            elif ((pre_R_x - curr_R_x) < 0):
+            elif ((pre_R_x - curr_R_x) <= 0 ):
                 print('정신차리세요')
             else:
                 print('올바른 자세입니다.')
