@@ -19,9 +19,6 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter('[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s')
 
-
-
-
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
@@ -43,8 +40,55 @@ def Rotate(src, degrees):
 
 fps_time = 0
 
+# class WebcamVideoStream:
+#     def __init__(self, src=0, width=320, height=240):
+#         self.stream = cv2.VideoCapture(src)
+#         self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+#         self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+#         (self.grabbed, self.frame) = self.stream.read()
+#         self.started = False
+#         self.read_lock = Lock()
+#
+#     def start(self):
+#         if self.started:
+#             print("already started!!")
+#             return None
+#         self.started = True
+#         self.thread = Thread(target=self.update, args=())
+#         self.thread.start()
+#         return self
+#
+#     def update(self):
+#         while self.started:
+#             (grabbed, frame) = self.stream.read()
+#             self.read_lock.acquire()
+#             self.grabbed, self.frame = grabbed, frame
+#             self.read_lock.release()
+#
+#     def read(self):
+#         self.read_lock.acquire()
+#         # print(type(self.frame))
+#         if type(self.frame) == np.ndarray:
+#             frame = self.frame.copy()
+#             self.read_lock.release()
+#             return frame
+#         else :
+#             frame = ""
+#         return frame
+#
+#     def stop(self):
+#         self.started = False
+#         self.thread.join()
+#
+#     def __exit__(self, exc_type, exc_value, traceback):
+#         self.stream.release()
+
+
+# update_cnt = 0
+# read_cnt = 0
+
 class WebcamVideoStream:
-    def __init__(self, src=0, width=320, height=240):
+    def __init__(self, src='', width=320, height=240):
         self.stream = cv2.VideoCapture(src)
         self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
@@ -62,22 +106,25 @@ class WebcamVideoStream:
         return self
 
     def update(self):
+        # global update_cnt
         while self.started:
-            (grabbed, frame) = self.stream.read()
             self.read_lock.acquire()
+            (grabbed, frame) = self.stream.read()
             self.grabbed, self.frame = grabbed, frame
             self.read_lock.release()
+            # update_cnt = update_cnt + 1
+            # print("update_cnt", update_cnt)
 
     def read(self):
+        # global read_cnt
         self.read_lock.acquire()
-        # print(type(self.frame))
-        if type(self.frame) == np.ndarray:
-            frame = self.frame.copy()
-            self.read_lock.release()
-            return frame
-        else :
-            frame = ""
-        return frame
+
+        grabbed = self.grabbed
+        frame = self.frame
+        self.read_lock.release()
+        # read_cnt += 1
+        # print("read_cnt", read_cnt)
+        return grabbed, frame
 
     def stop(self):
         self.started = False
@@ -100,11 +147,15 @@ if __name__ == "__main__":
     w, h = model_wh(args.resolution)
     e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
 
-    cap = WebcamVideoStream('C:/Users/BIT-USER/Desktop/HUN2.mp4').start()
+    # cap = WebcamVideoStream('C:/Users/BIT-USER/Desktop/HUN2.mp4').start()
+    cap = 'C:/Users/BIT-USER/Desktop/HUN2.mp4'
+    vs = WebcamVideoStream(src=cap).start()
+    v_cap = cv2.VideoCapture(cap)
 
-    if (cap.start() == False):
-        print("Error opening video stream or file")
-    image = cap.read()
+    # if (cap.start() == False):
+    #     print("Error opening video stream or file")
+
+    ret, image = vs.read()
     image = Rotate(image, 90)
     pre_L_x, pre_L_y, pre_R_x, pre_R_y = 0, 0, 0, 0
     curr_R_x, curr_R_y, curr_L_x, curr_L_y = 0, 0, 0, 0
@@ -118,11 +169,19 @@ if __name__ == "__main__":
 
     e1 = cv2.getTickCount()
     i = True
+
+    # frame_cnt = 0
+    # print("FRAMEEEE", v_cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
     while i:
-        image = cap.read()
-        if image != "" :
+        ret, image = vs.read()
+        if not ret:
+            break
+        else:
+            # print("frame_cnt", frame_cnt)
+            # frame_cnt += 1
             image = Rotate(image, 90)
-            # cv2.imshow('webcam', image)
+            cv2.imshow('webcam', image)
             humans = e.inference(image)
             image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
@@ -149,14 +208,14 @@ if __name__ == "__main__":
 
             if cv2.waitKey(1) == 27:
                 break
-        else:
+
             # cap.stop()
-            i = False
-            cv2.destroyAllWindows()
+    i = False
+    vs.stop()
+    cv2.destroyAllWindows()
 
     e2 = cv2.getTickCount()
     print("correcting time :: ", (e2 - e1) / cv2.getTickFrequency())
 
 
 logger.debug('finished+')
-sys.exit()
