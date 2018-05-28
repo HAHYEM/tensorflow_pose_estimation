@@ -35,13 +35,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_video_multi.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="run_video_multi.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/run_video_multi.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="191" column="52" lean-forward="true" selection-start-line="191" selection-start-column="52" selection-end-line="191" selection-end-column="52" />
+            <state relative-caret-position="537">
+              <caret line="180" column="12" lean-forward="true" selection-start-line="180" selection-start-column="12" selection-end-line="180" selection-end-column="12" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
+                <element signature="e#903#929#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_run_video_multi.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test_run_video_multi.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="226" column="12" selection-start-line="226" selection-start-column="12" selection-end-line="226" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#34#0" expanded="true" />
+                <element signature="e#903#929#0" />
               </folding>
             </state>
           </provider>
@@ -104,11 +118,12 @@
         <option value="$PROJECT_DIR$/src/test_run_video.py" />
         <option value="$PROJECT_DIR$/src/run_video.py" />
         <option value="$PROJECT_DIR$/src/run_video_multi.py" />
+        <option value="$PROJECT_DIR$/src/test_run_video_multi.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="953" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-7" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
   </component>
@@ -137,15 +152,16 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/BIT-USER/PycharmProjects/tf-pose-estimation-master/tf-pose-estimation-master/src/run_video_multi.py" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../HI_SOI_PROCESSING-master" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\BIT-USER\PycharmProjects\tf-pose-estimation-master\tf-pose-estimation-master" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\BIT-USER\PycharmProjects\tf-pose-estimation-master\tf-pose-estimation-master\src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\BIT-USER\PycharmProjects\tf-pose-estimation-master\tf-pose-estimation-master" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -304,13 +320,13 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-7" y="0" width="974" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.08746049" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17735043" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28635347" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.28926554" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -330,16 +346,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/run_video.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1495">
-          <caret line="76" column="41" lean-forward="true" selection-start-line="76" selection-start-column="41" selection-end-line="76" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/estimator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2024">
@@ -641,10 +647,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/run_video_multi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="191" column="52" lean-forward="true" selection-start-line="191" selection-start-column="52" selection-end-line="191" selection-end-column="52" />
+        <state relative-caret-position="537">
+          <caret line="180" column="12" lean-forward="true" selection-start-line="180" selection-start-column="12" selection-end-line="180" selection-end-column="12" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
+            <element signature="e#903#929#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test_run_video_multi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="226" column="12" selection-start-line="226" selection-start-column="12" selection-end-line="226" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+            <element signature="e#903#929#0" />
           </folding>
         </state>
       </provider>

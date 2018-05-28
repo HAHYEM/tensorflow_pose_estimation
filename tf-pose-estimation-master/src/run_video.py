@@ -86,18 +86,21 @@ if __name__ == '__main__':
         humans = e.inference(image)
         image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-        curr_R_x = humans[0].body_parts[2].x/2
-        curr_R_y = humans[0].body_parts[2].y
-        curr_L_x = humans[0].body_parts[5].x/2
-        curr_L_y = humans[0].body_parts[5].y
+        if 2 in humans[0].body_parts:
+            curr_R_x = humans[0].body_parts[2].x/2
+            curr_R_y = humans[0].body_parts[2].y
 
-        print(pre_R_x - curr_R_x)
-        if ((pre_R_x - curr_R_x) > 0.01):
-            print('정신차리세요')
-        elif ((pre_R_x - curr_R_x) < 0):
-            print('정신차리세요')
-        else:
-            print('올바른 자세입니다.')
+        if 5 in humans[0].body_parts:
+            curr_L_x = humans[0].body_parts[5].x/2
+            curr_L_y = humans[0].body_parts[5].y
+
+        # print(pre_R_x - curr_R_x)
+        # if ((pre_R_x - curr_R_x) > 0.01):
+        #     print('정신차리세요')
+        # elif ((pre_R_x - curr_R_x) < 0):
+        #     print('정신차리세요')
+        # else:
+        #     print('올바른 자세입니다.')
 
         #logger.debug('show+')
         cv2.putText(image,

@@ -11,6 +11,7 @@ from collections import Counter
 
 from estimator import TfPoseEstimator
 from networks import get_graph_path, model_wh
+import sys
 
 logger = logging.getLogger('TfPoseEstimator-Video')
 logger.setLevel(logging.DEBUG)
@@ -38,51 +39,6 @@ def Rotate(src, degrees):
     return dst
 
 fps_time = 0
-
-# class WebcamVideoStream:
-#     def __init__(self, src=0, width=320, height=240):
-#         self.stream = cv2.VideoCapture(src)
-#         self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-#         self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-#         (self.grabbed, self.frame) = self.stream.read()
-#         self.started = False
-#         self.read_lock = Lock()
-#
-#     def start(self):
-#         if self.started:
-#             print("already started!!")
-#             return None
-#         self.started = True
-#         self.thread = Thread(target=self.update, args=())
-#         self.thread.start()
-#         return self
-#
-#     def update(self):
-#         while self.started:
-#             (grabbed, frame) = self.stream.read()
-#             self.read_lock.acquire()
-#             self.grabbed, self.frame = grabbed, frame
-#             self.read_lock.release()
-#
-#     def read(self):
-#         self.read_lock.acquire()
-#         # print(type(self.frame))
-#         if type(self.frame) == np.ndarray:
-#             frame = self.frame.copy()
-#             self.read_lock.release()
-#             return frame
-#         else :
-#             frame = ""
-#         return frame
-#
-#     def stop(self):
-#         self.started = False
-#         self.thread.join()
-#
-#     def __exit__(self, exc_type, exc_value, traceback):
-#         self.stream.release()
-
-
 # update_cnt = 0
 read_cnt = 0
 
@@ -149,7 +105,7 @@ if __name__ == "__main__":
     e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
 
     # cap = WebcamVideoStream('C:/Users/BIT-USER/Desktop/HUN2.mp4').start()
-    cap = 'C:/Users/BIT-USER/Desktop/HUN2.mp4'
+    cap = 'C:/Users/BIT-USER/Desktop/HUN.mp4'
     vs = WebcamVideoStream(src=cap).start()
     v_cap = cv2.VideoCapture(cap)
 
@@ -163,12 +119,12 @@ if __name__ == "__main__":
     humans = e.inference(image)
     image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-    pre_R_x = humans[0].body_parts[2].x / 2
-    pre_R_y = humans[0].body_parts[2].y
-    pre_L_x = humans[0].body_parts[5].x / 2
-    pre_L_y = humans[0].body_parts[5].y
+    pre_R_x = humans[0].body_parts[4].x
+    pre_R_y = humans[0].body_parts[4].y
+    pre_L_x = humans[0].body_parts[7].x
+    pre_L_y = humans[0].body_parts[7].y
 
-    # print('pre_R_x', pre_R_x)
+    print('pre_R_x', pre_R_x)
     print('pre_R_y', pre_R_y)
 
     e1 = cv2.getTickCount()
@@ -188,25 +144,21 @@ if __name__ == "__main__":
             humans = e.inference(image)
             image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-            if 2 in humans[0].body_parts:
-                curr_R_x = humans[0].body_parts[2].x / 2
-                curr_R_y = humans[0].body_parts[2].y
+            if 4 in humans[0].body_parts:
+                curr_R_x = humans[0].body_parts[4].x
+                curr_R_y = humans[0].body_parts[4].y
 
-            if 5 in humans[0].body_parts:
-                curr_L_x = humans[0].body_parts[5].x / 2
-                curr_L_y = humans[0].body_parts[5].y
+            if 7 in humans[0].body_parts:
+                curr_L_x = humans[0].body_parts[7].x
+                curr_L_y = humans[0].body_parts[7].y
 
-            # print('curr_R_x', curr_R_x)
-            # print('curr_R_y', curr_R_y)
+            print('curr_R_x', curr_R_x)
+            print('curr_R_y', curr_R_y)
+            print('curr_L_x', curr_R_x)
+            print('curr_L_y', curr_R_y)
 
             # print('x좌표 차이', pre_R_x - curr_R_x)
             # print('y좌표 차이', pre_R_y - curr_R_y)
-            # if ((pre_R_x - curr_R_x) >= 0.01 or (pre_R_y - curr_R_y) >= 0.02):
-            #     print('정신차리세요')
-            # elif ((pre_R_x - curr_R_x) <= 0 ):
-            #     print('정신차리세요')
-            # else:
-            #     print('올바른 자세입니다.')
 
             # logger.debug('show+')
             cv2.putText(image,
