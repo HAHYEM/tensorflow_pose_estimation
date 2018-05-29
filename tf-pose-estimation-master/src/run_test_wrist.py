@@ -119,10 +119,10 @@ if __name__ == "__main__":
     humans = e.inference(image)
     image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-    pre_R_x = humans[0].body_parts[4].x
-    pre_R_y = humans[0].body_parts[4].y
-    pre_L_x = humans[0].body_parts[7].x
-    pre_L_y = humans[0].body_parts[7].y
+    w_pre_R_x = humans[0].body_parts[4].x
+    w_pre_R_y = humans[0].body_parts[4].y
+    w_pre_L_x = humans[0].body_parts[7].x
+    w_pre_L_y = humans[0].body_parts[7].y
 
     print('pre_R_x', pre_R_x)
     print('pre_R_y', pre_R_y)

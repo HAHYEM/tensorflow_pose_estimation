@@ -126,6 +126,8 @@ if __name__ == "__main__":
 
     print('pre_R_x', pre_R_x)
     print('pre_R_y', pre_R_y)
+    print('pre_L_x', pre_L_x)
+    print('pre_L_y', pre_L_y)
 
     e1 = cv2.getTickCount()
     i = True
@@ -156,7 +158,7 @@ if __name__ == "__main__":
             # print('curr_R_y', curr_R_y)
             # print('curr_L_x', curr_R_x)
             # print('curr_L_y', curr_R_y)
-
+            #
             # print('x좌표 차이', pre_R_x - curr_R_x)
             # print('y좌표 차이', pre_R_y - curr_R_y)
 
@@ -172,20 +174,20 @@ if __name__ == "__main__":
             chk_move = 0
             knee_move_cnt = 0
 
-            # if (pre_R_x - curr_R_x) > 0.02 or (pre_R_y - curr_R_y) > 0.02:
-            #     if chk_move == 0:
-            #         knee_move_cnt = knee_move_cnt + 1
-            #         chk_move = 1
-            #         start = int(floor(frame_cnt))
-            #         miss_location.append(start)
-            #         print("frame_cnt, start::::", frame_cnt, start)
-            #
-            # else:
-            #     if chk_move == 1:
-            #         end = int(ceil(frame_cnt))
-            #         miss_location.append(end)
-            #         print("frame_cnt, end::::", frame_cnt, end)
-            #     chk_move = 0
+            if abs(pre_R_x - curr_R_x) > 0.018 or abs(pre_R_y - curr_R_y) > 0.02:
+                if chk_move == 0:
+                    knee_move_cnt = knee_move_cnt + 1
+                    chk_move = 1
+                    start = int(frame_cnt / fps_time)
+                    miss_location.append(start)
+                    print("frame_cnt, start::::", frame_cnt, fps_time)
+
+            else:
+                if chk_move == 1:
+                    end = int(frame_cnt)
+                    miss_location.append(end)
+                    print("frame_cnt, end::::", frame_cnt, fps_time)
+                chk_move = 0
 
             if cv2.waitKey(1) == 27:
                 break
